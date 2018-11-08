@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Node {
     private InetAddress myIP;
-    private InetAddress ircIP;
+    private InetAddress lookupServerIP;
     private int N;
     private int myID;
     private ArrayList<FingerTableRow> fingerTable;
@@ -51,9 +51,9 @@ public class Node {
 
         boolean willingToBeAnchorNode = false;
 
-        // get the ip address for IRC from CLI
+        // get the ip address for LookupServer from CLI
         try {
-            node.ircIP = InetAddress.getByName(args[0]);
+            node.lookupServerIP = InetAddress.getByName(args[0]);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -86,7 +86,7 @@ public class Node {
 
         String result = null;
         if (willingToBeAnchorNode) {
-            result = node.nodeSender.registerAsAnchorNode(node, node.ircIP.getHostAddress(), "setAnchorNode");
+            result = node.nodeSender.registerAsAnchorNode(node, node.lookupServerIP.getHostAddress(), "setAnchorNode");
         }
 
 
@@ -140,11 +140,11 @@ public class Node {
         nodeSender.getMyFiles(myID, neighborNodeRow.getPointingIP(),"getMyFiles");
     }
 
-    /*Inform IRC and transfer all files in the system to the neighbor before going offline and then shut down the node*/
+    /*Inform LookupServer and transfer all files in the system to the neighbor before going offline and then shut down the node*/
     private void shutDownNode() {
         int anchorNodeID = Integer.MAX_VALUE;
         String anchorNodeIP = null;
-        HashMap<Integer, String> anchorNodeList = nodeSender.getAnchorNodes(this, ircIP.getHostAddress(), "getAnchorNodes");
+        HashMap<Integer, String> anchorNodeList = nodeSender.getAnchorNodes(this, lookupServerIP.getHostAddress(), "getAnchorNodes");
         if(isAnchorNode){
             if(anchorNodeList.size()-1 == 0){
                 System.out.println("You are the only anchor node.\nCan't shut down until any other node volunteers to be an anchor node ! ");
@@ -153,7 +153,7 @@ public class Node {
             else{
                 isAnchorNode = false;
                 anchorNodeList.remove("1");
-                nodeSender.notifyIRCOfGoingOffline(this, myID, ircIP.getHostAddress(), "deleteAnchorNode");
+                nodeSender.notifyLookupServerOfGoingOffline(this, myID, lookupServerIP.getHostAddress(), "deleteAnchorNode");
             }
         }
 
@@ -555,7 +555,7 @@ public class Node {
             }
         }
         else{
-            HashMap<Integer, String> anchorNodeList = nodeSender.getAnchorNodes(this, ircIP.getHostAddress(), "getAnchorNodes");
+            HashMap<Integer, String> anchorNodeList = nodeSender.getAnchorNodes(this, lookupServerIP.getHostAddress(), "getAnchorNodes");
             for(Map.Entry<Integer, String> entry: anchorNodeList.entrySet()){
                 String anchorID = String.valueOf(entry.getKey());
                 anchorNodeID = Integer.parseInt(anchorID);

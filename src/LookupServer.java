@@ -2,7 +2,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
 
-public class IRC {
+public class LookupServer {
     private int id;
     private String ip;
     //maintains the IDs and IPs of all nodes that are anchor nodes in a hash map
@@ -11,19 +11,19 @@ public class IRC {
 
 
     public static void main(String[] args){
-        IRC irc = new IRC();
+        LookupServer lookupServer = new LookupServer();
 
         // assign system's IP
-        irc.myIP = irc.getMyIP();
+        lookupServer.myIP = lookupServer.getMyIP();
 
-        //Display IP of IRC for new nodes to know who to connect to and ask for anchor nodes
-        System.out.println("MY IP: " + irc.myIP);
+        //Display IP of LookupServer for new nodes to know who to connect to and ask for anchor nodes
+        System.out.println("MY IP: " + lookupServer.myIP);
 
-        // start the IRC Server which has functions for registering the anchor nodes
+        // start the LookupServer Server which has functions for registering the anchor nodes
         // and to send the anchor node details
-        IRCServer ircServer = new IRCServer();
+        LookupServerListener lookupServerListener = new LookupServerListener();
         try {
-            ircServer.startServer(irc);
+            lookupServerListener.startServer(lookupServer);
         } catch (Exception e) {
             e.printStackTrace();
         }

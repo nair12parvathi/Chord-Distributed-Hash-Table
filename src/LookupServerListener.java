@@ -13,12 +13,12 @@ import java.net.Socket;
 
 
 
-public class IRCServer{
+public class LookupServerListener {
     /**
      * The port that the server listens on.
      */
     private static final int PORT = 8080;
-    private static IRC irc;
+    private static LookupServer lookupServer;
 
 
     /**
@@ -44,7 +44,7 @@ public class IRCServer{
             this.dispatcher =  new Dispatcher();
 
             // Register the getAnchorNodes and setAnchorNode handlers with it
-            dispatcher.register(new IRCHandler.GetSetHandler(irc));
+            dispatcher.register(new LookupServerHandler.GetSetHandler(lookupServer));
 
 
 
@@ -120,8 +120,8 @@ public class IRCServer{
 
 
 
-    public void startServer(IRC irc) throws Exception {
-        this.irc = irc;
+    public void startServer(LookupServer lookupServer) throws Exception {
+        this.lookupServer = lookupServer;
 
         System.out.println("The server is running.");
         ServerSocket listener = new ServerSocket(PORT);

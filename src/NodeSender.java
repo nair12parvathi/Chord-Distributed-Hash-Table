@@ -258,7 +258,7 @@ public class NodeSender {
 
     }
 
-    public void notifyIRCOfGoingOffline(Node node, int nodeGoingOffline, String ircIP, String method) {
+    public void notifyLookupServerOfGoingOffline(Node node, int nodeGoingOffline, String lookupServerIP, String method) {
         // Construct new request
         JSONRPC2Request request = null;
 
@@ -267,7 +267,7 @@ public class NodeSender {
 
         request = new JSONRPC2Request(method, params, requestID++);
 
-        JSONRPC2Response response = communicate(ircIP, method, request);
+        JSONRPC2Response response = communicate(lookupServerIP, method, request);
         // Print response result / error
         if (response.indicatesSuccess()){
             System.out.println((String) response.getResult());

@@ -5,15 +5,15 @@ import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import java.util.Map;
 
-public class IRCHandler {
+public class LookupServerHandler {
 
     // Implements a handler for "getAnchorNodes", "setAnchorNode" and "deleteAnchorNode" JSON-RPC methods
     // that return the anchor node list and registers a new anchor node respectively
     public static class GetSetHandler implements RequestHandler {
-        IRC irc;
+        LookupServer lookupServer;
 
-        public GetSetHandler(IRC irc) {
-            this.irc = irc;
+        public GetSetHandler(LookupServer lookupServer) {
+            this.lookupServer = lookupServer;
         }
 
         // Reports the method names of the handled requests
@@ -30,7 +30,7 @@ public class IRCHandler {
                 Map params = (Map) req.getNamedParams();
                 int nodeID = Integer.parseInt((String) params.get("myID").toString().trim());
                 String nodeIP = (String) params.get("myIP").toString().trim();
-                irc.addNodeToAnchorNodeList(nodeID, nodeIP);
+                lookupServer.addNodeToAnchorNodeList(nodeID, nodeIP);
                 String result ="Successfully registered as anchor node";
                 return new JSONRPC2Response(result, req.getID());
 
@@ -38,14 +38,14 @@ public class IRCHandler {
 
 
             else if (req.getMethod().equals("getAnchorNodes")) {
-                return new JSONRPC2Response(irc.getAnchorNodeList(), req.getID());
+                return new JSONRPC2Response(lookupServer.getAnchorNodeList(), req.getID());
             }
 
             else if (req.getMethod().equals("deleteAnchorNode")) {
                 Map params = (Map) req.getNamedParams();
                 int nodeGoingOffline = Integer.parseInt((String) params.get("nodeGoingOffline").toString().trim());
-                irc.deleteAnchorNode(nodeGoingOffline);
-                String result ="Notified IRC of unavailability";
+                lookupServer.deleteAnchorNode(nodeGoingOffline);
+                String result ="Notified LookupServer of unavailability";
                 return new JSONRPC2Response(result, req.getID());
             }
 

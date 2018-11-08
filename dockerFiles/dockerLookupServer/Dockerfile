@@ -11,4 +11,4 @@ RUN apt-get update && \
     apt-get install -y openssh-server net-tools iputils-ping ant nmap wget git vim build-essential && \
     apt-get clean
 WORKDIR DHT
-COPY irc.jar irc.jar
+COPY lookupserver.jar lookupserver.jar
